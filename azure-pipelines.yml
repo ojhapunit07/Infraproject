@@ -18,7 +18,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/prod'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
             commandOptions: '-reconfigure'
             backendServiceArm: 'punitserconn'
             backendAzureRmStorageAccountName: 'dakshst0007'
@@ -29,7 +29,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/prod'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
             environmentServiceNameAzureRM: 'punitserconn'
   - stage: InfraCost
     displayName: InfraCost
@@ -45,7 +45,7 @@ stages:
               tar -xvf infracost.tar.gz
               .\infracost.exe --version
               .\infracost.exe auth login
-              .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Environment/prod)' --format table
+              .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod')' --format table
 
   - stage: CodeScan
     displayName: terraform code Scan
@@ -58,8 +58,8 @@ stages:
             targetType: 'inline'
             script: |
               'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/prod'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
-            dir: '$(System.DefaultWorkingDirectory)/Environment/prod'
+            dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
