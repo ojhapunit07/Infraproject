@@ -28,9 +28,7 @@ stages:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: |
-              'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+            script: 'choco install tflint'
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
