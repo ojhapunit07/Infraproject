@@ -24,42 +24,42 @@ stages:
             backendAzureRmStorageAccountName: 'dakshst0007'
             backendAzureRmContainerName: 'dakshcontainer'
             backendAzureRmKey: 'prodterraform.tfstate'
-  #       - task: TerraformTask@5
-  #         displayName: terraform plan
-  #         inputs:
-  #           provider: 'azurerm'
-  #           command: 'plan'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Resourcegroupproject/Environment/prod'
-  #           environmentServiceNameAzureRM: 'punitserconn'
-  # - stage: InfraCost
-  #   displayName: InfraCost
-  #   jobs:
-  #     - job: infracost
-  #       displayName: terraform infracost
-  #       steps:
-  #       - task: PowerShell@2
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
-  #             tar -xvf infracost.tar.gz
-  #             .\infracost.exe --version
-  #             .\infracost.exe auth login
-  #             .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Resourcegroupproject/Environment/prod')' --format table
+        - task: TerraformTask@5
+          displayName: terraform plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+            environmentServiceNameAzureRM: 'punitserconn'
+  - stage: InfraCost
+    displayName: InfraCost
+    jobs:
+      - job: infracost
+        displayName: terraform infracost
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
+              tar -xvf infracost.tar.gz
+              .\infracost.exe --version
+              .\infracost.exe auth login
+              .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod')' --format table
 
-  # - stage: CodeScan
-  #   displayName: terraform code Scan
-  #   jobs:
-  #     - job: terraform_code_sacan
-  #       displayName: terraform code scan
-  #       steps:
-  #       - task: PowerShell@2
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
-  #             workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Resourcegroupproject/Environment/prod'
-  #       - task: tfsec@1
-  #         inputs:
-  #           version: 'v1.26.0'
-  #           dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Resourcegroupproject/Environment/prod'
+  - stage: CodeScan
+    displayName: terraform code Scan
+    jobs:
+      - job: terraform_code_sacan
+        displayName: terraform code scan
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
