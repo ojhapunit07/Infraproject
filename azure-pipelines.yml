@@ -9,6 +9,29 @@ stages:
       - job: initPlanValidate
         displayName: install init Plan 
         steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              - task: PowerShell@2
+                displayName: Install TFLint
+                inputs:
+                  targetType: inline
+                  script: |
+                    $version = "v0.50.3"
+                    $installDir = "$(Agent.ToolsDirectory)\tflint"
+              
+                    Invoke-WebRequest `
+                      -Uri "https://github.com/terraform-linters/tflint/releases/download/$version/tflint_windows_amd64.zip" `
+                      -OutFile "tflint.zip"
+              
+                    New-Item -ItemType Directory -Force -Path $installDir
+                    Expand-Archive tflint.zip -DestinationPath $installDir -Force
+              
+                    # Add to PATH for next tasks
+                    Write-Host "##vso[task.prependpath]$installDir"
+              
+                    tflint --version
         # - task: TerraformInstaller@1
         #   displayName: terraform install
         #   inputs:
@@ -25,25 +48,7 @@ stages:
         #     backendAzureRmContainerName: 'dakshcontainer'
         #     backendAzureRmKey: 'prodterraform.tfstate'
 
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              - task: PowerShell@2
-                displayName: Install TFLint
-                inputs:
-                  targetType: inline
-                  script: |
-                    $version = "v0.50.3"
-                    Invoke-WebRequest 
-                      -Uri "https://github.com/terraform-linters/tflint/releases/download/$version/tflint_windows_amd64.zip"
-                      -OutFile "tflint.zip"
-              
-                    Expand-Archive tflint.zip -DestinationPath C:\tflint -Force
-              
-                    $env:PATH += ";C:\tflint"
-              
-                    tflint --version
+        
         # - task: tfsec@1
         #   inputs:
         #     version: 'v1.26.0'
