@@ -50,7 +50,7 @@ stages:
                         tar -xvf infracost.tar.gz
                         .\infracost.exe --version
                         .\infracost.exe auth login
-                        .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Environment/prod' --format table
+                        .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod' --format table
  
   - stage: CodeScan
     displayName: terraform code Scan
