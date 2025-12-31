@@ -50,21 +50,21 @@ stages:
                         tar -xvf infracost.tar.gz
                         .\infracost.exe --version
                         .\infracost.exe auth login
-                        .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod' --format table
+                        .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment' --format table
  
-  - stage: CodeScan
-    displayName: terraform code Scan
-    jobs:
-      - job: terraform_code_sacan
-        displayName: terraform code scan
-        steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-        - task: tfsec@1
-          inputs:
-            version: 'v1.26.0'
-            dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  # - stage: CodeScan
+  #   displayName: terraform code Scan
+  #   jobs:
+  #     - job: terraform_code_sacan
+  #       displayName: terraform code scan
+  #       steps:
+  #       - task: PowerShell@2
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: |
+  #             'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
+  #             workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #       - task: tfsec@1
+  #         inputs:
+  #           version: 'v1.26.0'
+  #           dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
