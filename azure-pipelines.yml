@@ -20,7 +20,7 @@ stages:
               'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
               tflint --version
                tflint
-              
+               $env:PATH += ";C:\Program Files\TFLint"
         - task: tfsec@1
           displayName: tfsec
           inputs:
