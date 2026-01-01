@@ -18,6 +18,8 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
             script: |
               'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements; exit 0'
+              tflint --version
+               tflint
               
         - task: tfsec@1
           displayName: tfsec
