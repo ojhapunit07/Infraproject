@@ -85,6 +85,17 @@ stages:
       pool: MyAgent
       steps:
       - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          commandOptions: '-reconfigure'
+          backendServiceArm: 'punitserconn'
+          backendAzureRmStorageAccountName: 'dakshst0007'
+          backendAzureRmContainerName: 'dakshcontainer'
+          backendAzureRmKey: 'prodterraform.tfstate'
+      - task: TerraformTask@5
         displayName: terraform apply
         inputs:
           provider: 'azurerm'
