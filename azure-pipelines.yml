@@ -48,7 +48,7 @@ stages:
         - task: PublishPipelineArtifact@1
           displayName: Publish Build Artifact
           inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
+            targetPath: '$(System.DefaultWorkingDirectory)/build_artifacts'
             artifact: 'todo-ui'
             publishLocation: 'pipeline'
   - stage: deployToDev
@@ -62,6 +62,7 @@ stages:
           buildType: 'current'
           artifactName: 'todo-ui'
           targetPath: '$(Pipeline.Workspace)/build_artifacts'
+      
 
   #       - task: tfsec@1
   #         displayName: tfsec
