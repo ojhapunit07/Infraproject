@@ -2,25 +2,25 @@ name: stages pipeline
 trigger: none
 pr: none
 stages:
-  - stage: CodeScan
-    displayName: terraform code Scan
-    jobs:
-      - job: terraform_code_sacan
-        pool: MyAgent
-        continueOnError: true
-        displayName: terraform code scan
-        steps:
-        - task: PowerShell@2
-          displayName: tflint
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-            script: |
-              'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
-              tflint --version
-              tflint --init
-               tflint
+  # - stage: CodeScan
+  #   displayName: terraform code Scan
+  #   jobs:
+  #     - job: terraform_code_sacan
+  #       pool: MyAgent
+  #       continueOnError: true
+  #       displayName: terraform code scan
+  #       steps:
+        # - task: PowerShell@2
+        #   displayName: tflint
+        #   continueOnError: true
+        #   inputs:
+        #     targetType: 'inline'
+        #     workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+        #     script: |
+        #       'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
+        #       tflint --version
+        #       tflint --init
+        #        tflint
   - stage: BuildAndPackage
     displayName: Build & Artifact Packaging
     jobs:
