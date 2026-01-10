@@ -2,25 +2,25 @@ name: stages pipeline
 trigger: none
 pr: none
 stages:
-  # - stage: CodeScan
-  #   displayName: terraform code Scan
-  #   jobs:
-  #     - job: terraform_code_sacan
-  #       pool: MyAgent
-  #       continueOnError: true
-  #       displayName: terraform code scan
-  #       steps:
-        # - task: PowerShell@2
-        #   displayName: tflint
-        #   continueOnError: true
-        #   inputs:
-        #     targetType: 'inline'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-        #     script: |
-        #       'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
-        #       tflint --version
-        #       tflint --init
-        #        tflint
+  - stage: CodeScan
+    displayName: terraform code Scan
+    jobs:
+      - job: terraform_code_sacan
+        pool: MyAgent
+        continueOnError: true
+        displayName: terraform code scan
+        steps:
+        - task: PowerShell@2
+          displayName: tflint
+          continueOnError: true
+          inputs:
+            targetType: 'inline'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+            script: |
+              'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
+              tflint --version
+              tflint --init
+               tflint
   # - stage: BuildAndPackage
   #   displayName: Build & Artifact Packaging
   #   jobs:
@@ -111,51 +111,51 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
             environmentServiceNameAzureRM: 'punitserconn'
-  #       - task: PowerShell@2
-  #         displayName: infracost
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
-  #                       tar -xvf infracost.tar.gz
-  #                       .\infracost.exe --version
-  #                       .\infracost.exe auth login
-  #                       .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
+        - task: PowerShell@2
+          displayName: infracost
+          inputs:
+            targetType: 'inline'
+            script: |
+              Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
+                        tar -xvf infracost.tar.gz
+                        .\infracost.exe --version
+                        .\infracost.exe auth login
+                        .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
  
  
-  # - stage: mannualvalidation
-  #   displayName: mannual validation
-  #   jobs:
-  #   - job: mannualvalidation
-  #     displayName: mannual validation
-  #     pool: server
-  #     steps:
-  #     - task: ManualValidation@1
-  #       inputs:
-  #         notifyUsers: 'punitojha0808@gmail.com'
-  #         approvers: 'punitojha0808@gmail.com'
-  # - stage: terraformApply
-  #   displayName: terraform apply
-  #   jobs:
-  #   - job: terraformapplyjob
-  #     displayName: terraform apply
-  #     pool: MyAgent
-  #     steps:
-      # - task: TerraformTask@5
-      #   displayName: terraform init
-      #   inputs:
-      #     provider: 'azurerm'
-      #     command: 'init'
-      #     workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-      #     commandOptions: '-reconfigure'
-      #     backendServiceArm: 'punitserconn'
-      #     backendAzureRmStorageAccountName: 'dakshst0007'
-      #     backendAzureRmContainerName: 'dakshcontainer'
-      #     backendAzureRmKey: 'prodterraform.tfstate'
-      # - task: TerraformTask@5
-      #   displayName: terraform apply
-      #   inputs:
-      #     provider: 'azurerm'
-      #     command: 'apply'
-      #     workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-      #     environmentServiceNameAzureRM: 'punitserconn'
+  - stage: mannualvalidation
+    displayName: mannual validation
+    jobs:
+    - job: mannualvalidation
+      displayName: mannual validation
+      pool: server
+      steps:
+      - task: ManualValidation@1
+        inputs:
+          notifyUsers: 'punitojha0808@gmail.com'
+          approvers: 'punitojha0808@gmail.com'
+  - stage: terraformApply
+    displayName: terraform apply
+    jobs:
+    - job: terraformapplyjob
+      displayName: terraform apply
+      pool: MyAgent
+      steps:
+      - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          commandOptions: '-reconfigure'
+          backendServiceArm: 'punitserconn'
+          backendAzureRmStorageAccountName: 'dakshst0007'
+          backendAzureRmContainerName: 'dakshcontainer'
+          backendAzureRmKey: 'prodterraform.tfstate'
+      - task: TerraformTask@5
+        displayName: terraform apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          environmentServiceNameAzureRM: 'punitserconn'
