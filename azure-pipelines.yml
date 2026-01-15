@@ -21,36 +21,36 @@ stages:
   #             tflint --version
   #             tflint --init
   #              tflint
-  - stage: BuildAndPackage
-    displayName: Build & Artifact Packaging
-    jobs:
-    - job: ApplicationBuild
-      displayName: Application Build
-      pool: MyAgent
-      steps:            
-        - task: NodeTool@0
-          displayName: Setup Node.js Environment
-          inputs:
-            versionSource: 'spec'
-            versionSpec: '16.x'
-        - task: PowerShell@2
-          displayName: Install Dependencies
-          inputs:
-            targetType: 'inline'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
-            script: 'npm install'    
-        - task: PowerShell@2
-          displayName: Build Application
-          inputs:
-            targetType: 'inline'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
-            script: 'npm run build'    
-        - task: PublishPipelineArtifact@1
-          displayName: Publish Build Artifact
-          inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith/build'
-            artifact: 'todo-ui'
-            publishLocation: 'pipeline'
+  # - stage: BuildAndPackage
+  #   displayName: Build & Artifact Packaging
+  #   jobs:
+  #   - job: ApplicationBuild
+  #     displayName: Application Build
+  #     pool: MyAgent
+  #     steps:            
+  #       - task: NodeTool@0
+  #         displayName: Setup Node.js Environment
+  #         inputs:
+  #           versionSource: 'spec'
+  #           versionSpec: '16.x'
+  #       - task: PowerShell@2
+  #         displayName: Install Dependencies
+  #         inputs:
+  #           targetType: 'inline'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
+  #           script: 'npm install'    
+  #       - task: PowerShell@2
+  #         displayName: Build Application
+  #         inputs:
+  #           targetType: 'inline'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
+  #           script: 'npm run build'    
+        # - task: PublishPipelineArtifact@1
+        #   displayName: Publish Build Artifact
+        #   inputs:
+        #     targetPath: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith/build'
+        #     artifact: 'todo-ui'
+        #     publishLocation: 'pipeline'
   # - stage: deployToDev
   #   # condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
   #   displayName: Deploy To Dev VM
