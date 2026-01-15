@@ -100,13 +100,17 @@ stages:
             steps:
             - task: DownloadPipelineArtifact@2
               inputs:
-                buildType: 'current'
+                buildType: 'specific'
+                project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
+                definition: '15'
+                buildVersionToDownload: 'latest'
                 targetPath: '$(Pipeline.Workspace)'
             - task: CmdLine@2
               inputs:
                 script: |
                   sudo rm -rf /var/www/html/*
-                  sudo cp -r  $(Pipeline.Workspace)/build/* /var/www/html/
+                  sudo cp -r  $(Pipeline.Workspace)/todo-ui/* /var/www/html/
+            
 
   # - stage: plan
   #   displayName: init Plan infracost
