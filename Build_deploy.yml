@@ -38,7 +38,7 @@ stages:
     #     artifact: 'todo-ui'
     #     publishLocation: 'pipeline'
 - stage: deploystage
-  displayName: deploy job 
+  displayName: deploy stage 
   jobs:
   - job: deploy
     displayName: deploy job
@@ -51,7 +51,7 @@ stages:
         buildVersionToDownload: 'latest'
         downloadType: 'single'
         artifactName: 'todo-ui'
-        downloadPath: '$(System.ArtifactsDirectory)'
+        downloadPath: '$(Pipeline.Workspace)'
 
 
 
