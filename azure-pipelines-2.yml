@@ -16,18 +16,18 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: DownloadBuildArtifacts@1
-            displayName: download artifact
-            inputs:
-              buildType: 'specific'
-              project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-              pipeline: '18'
-              buildVersionToDownload: 'specific'
-              buildId: '176'
-              downloadType: 'single'
-              artifactName: 'todo-ui'
-              downloadPath: '$(System.ArtifactsDirectory)'
-              cleanDestinationFolder: true
+          # - task: DownloadBuildArtifacts@1
+          #   displayName: download artifact
+          #   inputs:
+          #     buildType: 'specific'
+          #     project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
+          #     pipeline: '18'
+          #     buildVersionToDownload: 'specific'
+          #     buildId: '176'
+          #     downloadType: 'single'
+          #     artifactName: 'todo-ui'
+          #     downloadPath: '$(System.ArtifactsDirectory)'
+          #     cleanDestinationFolder: true
           - task: CopyFilesOverSSH@0
             displayName: copy artifact
             inputs:
