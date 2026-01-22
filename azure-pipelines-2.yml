@@ -43,8 +43,8 @@ stages:
               runOptions: 'inline'
               inline: |
                 sudo apt-get update -y
-                sudo apt-get install -y nginx
-                sudo systemctl restart nginx
+                sudo apt install apache2 -y
+                
                 exit 0
               readyTimeout: '20000'
           - task: SSH@0
