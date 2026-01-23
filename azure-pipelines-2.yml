@@ -39,7 +39,8 @@ stages:
               targetType: 'inline'
               script: |
                 sudo rm -rf /var/www/html/*
-                sudo cp -r "$(System.DefaultWorkingDierectory)/Build/build/"* /var/www/html/
+                sudo cp -r "/home/punit/azagent/_work/1/s/\$(System.DefaultWorkingDierectory)/Build/build/"* /var/www/html/
+
 
          
           
