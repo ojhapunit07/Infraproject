@@ -17,14 +17,22 @@ stages:
         deploy:
           steps:
          
-          - task: DownloadPipelineArtifact@2
+          # - task: DownloadPipelineArtifact@2
+          #   inputs:
+          #     buildType: 'specific'
+          #     project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
+          #     definition: '18'
+          #     buildVersionToDownload: 'specific'
+          #     pipelineId: '176'
+          #     artifactName: 'todo-ui'
+          #     targetPath: '$(System.DefaultWorkingDierectory)/Build'
+          - task: Bash@3
             inputs:
-              buildType: 'specific'
-              project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-              definition: '18'
-              buildVersionToDownload: 'specific'
-              pipelineId: '176'
-              artifactName: 'todo-ui'
-              targetPath: '$(System.DefaultWorkingDierectory)/Build'
+              targetType: 'inline'
+              script: |
+                #!/bin/bash
+                set -e
+                sudo apt-get update -y
+                sudo apt-get install nginx -y
          
           
