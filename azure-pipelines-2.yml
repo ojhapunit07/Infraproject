@@ -17,15 +17,15 @@ stages:
         deploy:
           steps:
          
-          # - task: DownloadPipelineArtifact@2
-          #   inputs:
-          #     buildType: 'specific'
-          #     project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-          #     definition: '18'
-          #     buildVersionToDownload: 'specific'
-          #     pipelineId: '176'
-          #     artifactName: 'todo-ui'
-          #     targetPath: '$(System.DefaultWorkingDierectory)/Build'
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'specific'
+              project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
+              definition: '18'
+              buildVersionToDownload: 'specific'
+              pipelineId: '176'
+              artifactName: 'todo-ui'
+              targetPath: '$(System.DefaultWorkingDirectory)/Build'
           # - task: Bash@3
           #   inputs:
           #     targetType: 'inline'
@@ -39,7 +39,7 @@ stages:
               targetType: 'inline'
               script: |
                 sudo rm -rf /var/www/html/*
-                sudo cp -r "/home/punit/azagent/_work/1/s/\$(System.DefaultWorkingDierectory)/Build/build/"* /var/www/html/
+                sudo cp -r "$(System.DefaultWorkingDirectory)/Build/build/"* /var/www/html/
 
 
          
