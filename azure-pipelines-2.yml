@@ -16,95 +16,15 @@ stages:
       runOnce:
         deploy:
           steps:
-          # - task: DownloadBuildArtifacts@1
-          #   displayName: download artifact
-          #   inputs:
-          #     buildType: 'specific'
-          #     project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-          #     pipeline: '18'
-          #     buildVersionToDownload: 'specific'
-          #     buildId: '176'
-          #     downloadType: 'single'
-          #     artifactName: 'todo-ui'
-          #     downloadPath: '$(System.ArtifactsDirectory)'
-          #     cleanDestinationFolder: true
-          # - task: CopyFilesOverSSH@0
-          #   displayName: copy artifact
-          #   inputs:
-          #     sshEndpoint: 'vmservice-conn'
-          #     sourceFolder: '$(System.ArtifactsDirectory)/build'
-          #     contents: '**'
-          #     targetFolder: '/home/punit'
-          #     readyTimeout: '20000'
-          # - task: SSH@0
-          #   displayName: nginx install on vm
-          #   inputs:
-          #     sshEndpoint: 'vmservice-conn'
-          #     runOptions: 'inline'
-          #     inline: |
-          #       #!/bin/bash
-          #             set -e
-          #             export DEBIAN_FRONTEND=noninteractive
-                
-          #             sudo apt-get update -y
-          #             sudo apt-get install -y nginx
-          #             sudo systemctl restart nginx
-          #             exit 0
-          #     readyTimeout: '20000'
-          # - task: SSH@0
-          #   displayName: build copy to vm
-          #   inputs:
-          #     sshEndpoint: 'vmservice-conn'
-          #     runOptions: 'inline'
-          #     inline: |
-          #       sudo rm -rf /var/www/html*
-          #       sudo cp -r /home/punit/* /var/www/html
-          #     readyTimeout: '20000'
-          - task: DownloadBuildArtifacts@1
-            displayName: download artifact
+         
+          - task: DownloadPipelineArtifact@2
             inputs:
               buildType: 'specific'
               project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-              pipeline: '18'
+              definition: '18'
               buildVersionToDownload: 'specific'
-              buildId: '176'
-              downloadType: 'single'
+              pipelineId: '176'
               artifactName: 'todo-ui'
-              downloadPath: '$(System.ArtifactsDirectory)'
-              cleanDestinationFolder: true
-
-          - task: CopyFilesOverSSH@0
-            displayName: copy artifact
-            inputs:
-              sshEndpoint: 'vmservice-conn'
-              sourceFolder: '$(System.ArtifactsDirectory)'
-              contents: '**'
-              targetFolder: '/home/punit/build'
-              readyTimeout: '20000'
-
-          - task: SSH@0
-            displayName: nginx install on vm
-            inputs:
-              sshEndpoint: 'vmservice-conn'
-              runOptions: 'inline'
-              inline: |
-                sudo apt-get update -y
-                sudo apt-get install -y nginx
-                sudo systemctl enable nginx
-                sudo systemctl restart nginx
-              readyTimeout: '20000'
-
-          - task: SSH@0
-            displayName: deploy build to nginx
-            inputs:
-              sshEndpoint: 'vmservice-conn'
-              runOptions: 'inline'
-              inline: |
-                sudo mkdir -p /var/www/html
-                sudo rm -rf /var/www/html/*
-                sudo cp -r /home/punit/build/* /var/www/html/
-                sudo chown -R www-data:www-data /var/www/html
-                sudo systemctl restart nginx
-                ls -la /var/www/html
-                curl -I http://localhost
-              readyTimeout: '20000'
+              targetPath: '$(System.DefaultWorkingDierectory)/Build'
+         
+          
