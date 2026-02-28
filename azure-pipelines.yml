@@ -129,10 +129,10 @@ stages:
             backendAzureRmStorageAccountName: 'punitst00456'
             backendAzureRmContainerName: 'pipelinecontainer'
             backendAzureRmKey: 'prodterraform.tfstate'
-      - job: plan
-        displayName: plan job
-        pool: myagentpool
-        steps:
+      # - job: plan
+      #   displayName: plan job
+      #   pool: myagentpool
+      #   steps:
         - task: TerraformTask@5
           displayName: terraform plan
           inputs:
