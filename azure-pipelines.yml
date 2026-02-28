@@ -140,16 +140,16 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
             environmentServiceNameAzureRM: 'service connection'
-        - task: PowerShell@2
-          displayName: infracost
-          inputs:
-            targetType: 'inline'
-            script: |
-              Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
-                        tar -xvf infracost.tar.gz
-                        .\infracost.exe --version
-                        .\infracost.exe auth login
-                        .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
+        # - task: PowerShell@2
+        #   displayName: infracost
+        #   inputs:
+        #     targetType: 'inline'
+        #     script: |
+        #       Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
+        #                 tar -xvf infracost.tar.gz
+        #                 .\infracost.exe --version
+        #                 .\infracost.exe auth login
+        #                 .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
  
  
   - stage: mannualvalidation
