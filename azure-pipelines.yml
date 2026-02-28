@@ -83,61 +83,60 @@ stages:
   #         inputs:
   #           version: 'v1.26.0'
   #           dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  - stage: deploytodo
-    displayName: deploy todo on vm
-    jobs:
-    - deployment: deploy_on_vm
-      displayName: deploy on vm
-      environment:
-        name: devops
+  # - stage: deploytodo
+  #   displayName: deploy todo on vm
+  #   jobs:
+  #   - deployment: deploy_on_vm
+  #     displayName: deploy on vm
+  #     environment:
+  #       name: devops
         # resourceName: 
         # resourceId: string # Id of resource.
-        resourceType: virtualMachine
+        # resourceType: virtualMachine
         
-      strategy: 
-        runOnce:
-          deploy:
-            steps:
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                buildType: 'specific'
-                project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-                definition: '15'
-                buildVersionToDownload: 'latest'
-                targetPath: '$(Pipeline.Workspace)'
-            - task: CmdLine@2
-              inputs:
-                script: |
-                  sudo rm -rf /var/www/html/*
-                  sudo cp -r  $(Pipeline.Workspace)/todo-ui/* /var/www/html/
+      # strategy: 
+      #   runOnce:
+      #     deploy:
+      #       steps:
+      #       - task: DownloadPipelineArtifact@2
+      #         inputs:
+      #           buildType: 'specific'
+      #           project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
+      #           definition: '15'
+      #           buildVersionToDownload: 'latest'
+      #           targetPath: '$(Pipeline.Workspace)'
+      #       - task: CmdLine@2
+      #         inputs:
+      #           script: |
+      #             sudo rm -rf /var/www/html/*
+      #             sudo cp -r  $(Pipeline.Workspace)/todo-ui/* /var/www/html/
             
 
-  # - stage: plan
-  #   displayName: init Plan infracost
-  #   jobs:
-  #     - job: initPlan
-  #       pool: MyAgent
-  #       displayName: install init Plan 
-  #       steps:
-  #       - task: TerraformTask@5
-  #         displayName: terraform init
-  #         inputs:
-  #           provider: 'azurerm'
-  #           command: 'init'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  #           commandOptions: '-reconfigure'
-  #           backendServiceArm: 'punitserconn'
-  #           backendAzureRmStorageAccountName: 'dakshst0007'
-  #           backendAzureRmContainerName: 'dakshcontainer'
-  #           backendAzureRmKey: 'prodterraform.tfstate'
+  - stage: plan
+    displayName: init Plan infracost
+    jobs:
+      - job: initPlan
+        pool: myagentpool
+        displayName: install init Plan 
+        steps:
+        - task: TerraformTask@5
+          displayName: terraform init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+            backendServiceArm: 'service connection'
+            backendAzureRmStorageAccountName: 'punitst00456'
+            backendAzureRmContainerName: 'pipelinecontainer'
+            backendAzureRmKey: 'prodterraform.tfstate'
 
-  #       - task: TerraformTask@5
-  #         displayName: terraform plan
-  #         inputs:
-  #           provider: 'azurerm'
-  #           command: 'plan'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  #           environmentServiceNameAzureRM: 'punitserconn'
+        - task: TerraformTask@5
+          displayName: terraform plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+            environmentServiceNameAzureRM: 'service connection'
   #       - task: PowerShell@2
   #         displayName: infracost
   #         inputs:
@@ -150,39 +149,38 @@ stages:
   #                       .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
  
  
-  # - stage: mannualvalidation
-  #   displayName: mannual validation
-  #   jobs:
-  #   - job: mannualvalidation
-  #     displayName: mannual validation
-  #     pool: server
-  #     steps:
-  #     - task: ManualValidation@1
-  #       inputs:
-  #         notifyUsers: 'punitojha0808@gmail.com'
-  #         approvers: 'punitojha0808@gmail.com'
-  # - stage: terraformApply
-  #   displayName: terraform apply
-  #   jobs:
-  #   - job: terraformapplyjob
-  #     displayName: terraform apply
-  #     pool: MyAgent
-  #     steps:
-  #     - task: TerraformTask@5
-  #       displayName: terraform init
-  #       inputs:
-  #         provider: 'azurerm'
-  #         command: 'init'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  #         commandOptions: '-reconfigure'
-  #         backendServiceArm: 'punitserconn'
-  #         backendAzureRmStorageAccountName: 'dakshst0007'
-  #         backendAzureRmContainerName: 'dakshcontainer'
-  #         backendAzureRmKey: 'prodterraform.tfstate'
-  #     - task: TerraformTask@5
-  #       displayName: terraform apply
-  #       inputs:
-  #         provider: 'azurerm'
-  #         command: 'apply'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  #         environmentServiceNameAzureRM: 'punitserconn'
+  - stage: mannualvalidation
+    displayName: mannual validation
+    jobs:
+    - job: mannualvalidation
+      displayName: mannual validation
+      pool: server
+      steps:
+      - task: ManualValidation@1
+        inputs:
+          notifyUsers: 'punitojha0808@gmail.com'
+          approvers: 'punitojha0808@gmail.com'
+  - stage: terraformApply
+    displayName: terraform apply
+    jobs:
+    - job: terraformapplyjob
+      displayName: terraform apply
+      pool: myagentpool
+      steps:
+      - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          backendServiceArm: 'service connection'
+          backendAzureRmStorageAccountName: 'punitst00456'
+          backendAzureRmContainerName: 'pipelinecontainer'
+          backendAzureRmKey: 'prodterraform.tfstate'
+      - task: TerraformTask@5
+        displayName: terraform apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          environmentServiceNameAzureRM: 'service connection'
