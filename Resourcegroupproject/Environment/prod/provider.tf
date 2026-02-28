@@ -1,6 +1,6 @@
 terraform {
-  # backend "azurerm" {
-  #   }
+   backend "azurerm" {
+     }
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -10,6 +10,7 @@ terraform {
 }
 provider "azurerm" {
   features {}
-  subscription_id = "bd6e61a5-d2a5-4a90-95dd-c977f616c3b7"
+  subscription_id = "40811e27-06f5-4d2e-8700-914ec325b441"
 
 }
+
