@@ -160,9 +160,7 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              infracost breakdown `
-                --path "$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod" `
-                --format table
+              infracost breakdown --path "$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod" --format table
   - stage: mannualvalidation
     displayName: mannual validation
     jobs:
@@ -172,8 +170,8 @@ stages:
       steps:
       - task: ManualValidation@1
         inputs:
-          notifyUsers: 'ashuchauhanks@gmail.com'
-          approvers: 'ashuchauhanks@gmail.com'
+          notifyUsers: 'punitojha0808@gmail.com'
+          approvers: 'punitojha0808@gmail.com'
   # - stage: terraformApply
   #   displayName: terraform apply
   #   jobs:
