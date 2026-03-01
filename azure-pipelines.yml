@@ -111,7 +111,21 @@ stages:
       #           script: |
       #             sudo rm -rf /var/www/html/*
       #             sudo cp -r  $(Pipeline.Workspace)/todo-ui/* /var/www/html/
-            
+  - stage: validate
+    displayName: validate stage
+    jobs:
+    - job: fmtvalidatesecurityscan
+      displayName: fmt validate security scan 
+      steps:
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          commandOptions: 'terraform fmt -check'
 
   - stage: plan
     displayName: init Plan 
@@ -130,10 +144,6 @@ stages:
             backendAzureRmStorageAccountName: 'punitst00456'
             backendAzureRmContainerName: 'pipelinecontainer'
             backendAzureRmKey: 'prodterraform.tfstate'
-      # - job: plan
-      #   displayName: plan job
-      #   pool: myagentpool
-      #   steps:
         - task: TerraformTask@5
           displayName: terraform plan
           inputs:
@@ -165,6 +175,7 @@ stages:
           notifyUsers: 'punitojha0808@gmail.com'
           approvers: 'punitojha0808@gmail.com'
   - stage: terraformApply
+    dependsOn: mannualvalidation
     displayName: terraform apply
     jobs:
     - job: terraformapplyjob
