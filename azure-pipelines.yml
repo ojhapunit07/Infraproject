@@ -1,6 +1,7 @@
 name: stages pipeline
 trigger: none
-pr: none
+variables:
+- group: infracost-secrets
 stages:
   # - stage: CodeScan
   #   displayName: terraform code Scan
@@ -143,7 +144,7 @@ stages:
         
         - task: InfracostSetup@2
           inputs:
-            apiKey: 'ics_v1_CqJXgE5v3KVMxLjVdZWUBi_GVraLbRuDKjxJ8vIaOAhpwTSPwTmPReQeDSma5gWjpqD9ogAz'
+            apiKey: $(INFRACOST_API_KEY)
             version: '0.10.x'
             currency: 'INR'
         - task: PowerShell@2
