@@ -115,6 +115,7 @@ stages:
     displayName: validate stage
     jobs:
     - job: fmtvalidatesecurityscan
+      pool: myagentpool
       displayName: fmt validate security scan 
       steps:
       - task: TerraformInstaller@1
