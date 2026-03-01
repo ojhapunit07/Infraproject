@@ -117,7 +117,7 @@ stages:
     jobs:
       - job: initPlan
         pool: myagentpool
-        displayName: install init Plan 
+        displayName: init Plan 
         steps:
         - task: TerraformTask@5
           displayName: terraform init
@@ -160,18 +160,18 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              infracost breakdown --path "$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod" --format table
-  - stage: mannualvalidation
-    displayName: mannual validation
-    jobs:
-    - job: mannualvalidation
-      displayName: mannual validation
-      pool: server
-      steps:
-      - task: ManualValidation@1
-        inputs:
-          notifyUsers: 'punitojha0808@gmail.com'
-          approvers: 'punitojha0808@gmail.com'
+              infracost breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod' --format table
+  # - stage: mannualvalidation
+  #   displayName: mannual validation
+  #   jobs:
+  #   - job: mannualvalidation
+  #     displayName: mannual validation
+  #     pool: server
+  #     steps:
+  #     - task: ManualValidation@1
+  #       inputs:
+  #         notifyUsers: 'punitojha0808@gmail.com'
+  #         approvers: 'punitojha0808@gmail.com'
   # - stage: terraformApply
   #   displayName: terraform apply
   #   jobs:
