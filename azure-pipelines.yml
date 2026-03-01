@@ -150,7 +150,11 @@ stages:
         #                 .\infracost.exe --version
         #                 .\infracost.exe auth login
         #                 .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
- 
+        - task: InfracostSetup@2
+          inputs:
+            apiKey: 'ics_v1_CqJXgE5v3KVMxLjVdZWUBi_GVraLbRuDKjxJ8vIaOAhpwTSPwTmPReQeDSma5gWjpqD9ogAz'
+            version: '0.10.x'
+            currency: 'INR'
  
   - stage: mannualvalidation
     displayName: mannual validation
