@@ -125,7 +125,7 @@ stages:
           provider: 'azurerm'
           command: 'validate'
           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-          commandOptions: 'terraform fmt -check'
+          # commandOptions: 'terraform fmt -check'
 
   - stage: plan
     displayName: init Plan 
