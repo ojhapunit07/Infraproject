@@ -155,7 +155,14 @@ stages:
             apiKey: 'ics_v1_CqJXgE5v3KVMxLjVdZWUBi_GVraLbRuDKjxJ8vIaOAhpwTSPwTmPReQeDSma5gWjpqD9ogAz'
             version: '0.10.x'
             currency: 'INR'
- 
+        - task: PowerShell@2
+          displayName: Run Infracost Breakdown
+          inputs:
+            targetType: 'inline'
+            script: |
+              infracost breakdown `
+                --path "$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod" `
+                --format table
   - stage: mannualvalidation
     displayName: mannual validation
     jobs:
