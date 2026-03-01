@@ -140,16 +140,7 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
             environmentServiceNameAzureRM: 'service connection'
-        # - task: PowerShell@2
-        #   displayName: infracost
-        #   inputs:
-        #     targetType: 'inline'
-        #     script: |
-        #       Invoke-WebRequest https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.tar.gz -OutFile infracost.tar.gz
-        #                 tar -xvf infracost.tar.gz
-        #                 .\infracost.exe --version
-        #                 .\infracost.exe auth login
-        #                 .\infracost.exe breakdown --path '$(System.DefaultWorkingDirectory)\Resourcegroupproject\Environment\prod' --format table
+        
         - task: InfracostSetup@2
           inputs:
             apiKey: 'ics_v1_CqJXgE5v3KVMxLjVdZWUBi_GVraLbRuDKjxJ8vIaOAhpwTSPwTmPReQeDSma5gWjpqD9ogAz'
@@ -161,38 +152,38 @@ stages:
             targetType: 'inline'
             script: |
               infracost breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod' --format table
-  # - stage: mannualvalidation
-  #   displayName: mannual validation
-  #   jobs:
-  #   - job: mannualvalidation
-  #     displayName: mannual validation
-  #     pool: server
-  #     steps:
-  #     - task: ManualValidation@1
-  #       inputs:
-  #         notifyUsers: 'punitojha0808@gmail.com'
-  #         approvers: 'punitojha0808@gmail.com'
-  # - stage: terraformApply
-  #   displayName: terraform apply
-  #   jobs:
-  #   - job: terraformapplyjob
-  #     displayName: terraform apply
-  #     pool: myagentpool
-  #     steps:
-      # - task: TerraformTask@5
-      #   displayName: terraform init
-      #   inputs:
-      #     provider: 'azurerm'
-      #     command: 'init'
-      #     workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-      #     backendServiceArm: 'service connection'
-      #     backendAzureRmStorageAccountName: 'punitst00456'
-      #     backendAzureRmContainerName: 'pipelinecontainer'
-      #     backendAzureRmKey: 'prodterraform.tfstate'
-      # - task: TerraformTask@5
-      #   displayName: terraform apply
-      #   inputs:
-      #     provider: 'azurerm'
-      #     command: 'apply'
-      #     workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-      #     environmentServiceNameAzureRM: 'service connection'
+  - stage: mannualvalidation
+    displayName: mannual validation
+    jobs:
+    - job: mannualvalidation
+      displayName: mannual validation
+      pool: server
+      steps:
+      - task: ManualValidation@1
+        inputs:
+          notifyUsers: 'punitojha0808@gmail.com'
+          approvers: 'punitojha0808@gmail.com'
+  - stage: terraformApply
+    displayName: terraform apply
+    jobs:
+    - job: terraformapplyjob
+      displayName: terraform apply
+      pool: myagentpool
+      steps:
+      - task: TerraformTask@5
+        displayName: terraform init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          backendServiceArm: 'service connection'
+          backendAzureRmStorageAccountName: 'punitst00456'
+          backendAzureRmContainerName: 'pipelinecontainer'
+          backendAzureRmKey: 'prodterraform.tfstate'
+      - task: TerraformTask@5
+        displayName: terraform apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+          environmentServiceNameAzureRM: 'service connection'
