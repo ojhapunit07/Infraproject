@@ -170,6 +170,7 @@ stages:
           displayName: tf sec task
           inputs:
             version: 'v1.26.0'
+            args: '--severity HIGH'
             dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
         - task: TerraformTask@5
           displayName: terraform plan
