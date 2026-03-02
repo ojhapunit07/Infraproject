@@ -138,12 +138,12 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
           # commandOptions: 'terraform fmt -check'
 
-  - stage: plan
+  - stage: initplaninfracost
     displayName: init Plan 
     jobs:
       - job: initPlan
         pool: myagentpool
-        displayName: init Plan 
+        displayName: init Plan infracost
         steps:
         - task: TerraformTask@5
           displayName: terraform init
