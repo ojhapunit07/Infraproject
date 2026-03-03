@@ -174,14 +174,15 @@ stages:
             args: '--severity MEDIUM'
             dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
         - task: PowerShell@2
-          displayName: checkov tool
+          displayName: checkov task
           continueOnError: true
           inputs:
             targetType: 'inline'
             script: |
-              python -m pip install checkov
-                  python -m checkov -d . --framework terraform
-                displayName: Run Checkov Safely
+              python -m pip install --upgrade pip
+              pip install --upgrade checkov
+              checkov -d . --framework terraform
+                
         - task: TerraformTask@5
           displayName: terraform plan
           inputs:
