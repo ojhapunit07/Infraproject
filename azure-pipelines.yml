@@ -3,158 +3,14 @@ trigger: none
 variables:
 - group: infracost-secrets
 stages:
-  # - stage: CodeScan
-  #   displayName: terraform code Scan
-  #   jobs:
-  #     - job: terraform_code_sacan
-  #       pool: MyAgent
-  #       continueOnError: true
-  #       displayName: terraform code scan
-  #       steps:
-  #       - task: PowerShell@2
-  #         displayName: tflint
-  #         continueOnError: true
-  #         inputs:
-  #           targetType: 'inline'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  #           script: |
-  #             'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
-  #             tflint --version
-  #             tflint --init
-  #              tflint
-  # - stage: BuildAndPackage
-  #   displayName: Build & Artifact Packaging
-  #   jobs:
-  #   - job: ApplicationBuild
-  #     displayName: Application Build
-  #     pool: MyAgent
-  #     steps:            
-  #       - task: NodeTool@0
-  #         displayName: Setup Node.js Environment
-  #         inputs:
-  #           versionSource: 'spec'
-  #           versionSpec: '16.x'
-  #       - task: PowerShell@2
-  #         displayName: Install Dependencies
-  #         inputs:
-  #           targetType: 'inline'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
-  #           script: 'npm install'    
-  #       - task: PowerShell@2
-  #         displayName: Build Application
-  #         inputs:
-  #           targetType: 'inline'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
-  #           script: 'npm run build'    
-        # - task: PublishPipelineArtifact@1
-        #   displayName: Publish Build Artifact
-        #   inputs:
-        #     targetPath: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith/build'
-        #     artifact: 'todo-ui'
-        #     publishLocation: 'pipeline'
-  # - stage: deployToDev
-  #   # condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
-  #   displayName: Deploy To Dev VM
-  #   jobs:
-  #   - job: deploy
-  #     pool: MyAgent      
-  #     steps:
-  #     - task: DownloadPipelineArtifact@2
-  #       inputs:
-  #         buildType: 'current'
-  #         artifactName: 'todo-ui'
-  #         targetPath: '$(Pipeline.Workspace)/todo-ui'
-  #     - task: CopyFilesOverSSH@0
-  #       inputs:
-  #         sshEndpoint: 'sshcon'
-  #         sourceFolder: '$(Pipeline.Workspace)/todo-ui'
-  #         contents: '**'
-  #         targetFolder: '/home/adminuser/todo-ui'
-  #         readyTimeout: '20000'
-  #     - task: SSH@0
-  #       inputs:
-  #         sshEndpoint: 'sshcon'
-  #         runOptions: 'commands'
-  #         commands: |
-  #           sudo rm -rf /var/www/html/*
-  #           sudo cp -r /home/adminuser/todo-ui/* /var/www/html
-  #         readyTimeout: '20000'
-  #       - task: tfsec@1
-  #         displayName: tfsec
-  #         inputs:
-  #           version: 'v1.26.0'
-  #           dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-  # - stage: deploytodo
-  #   displayName: deploy todo on vm
-  #   jobs:
-  #   - deployment: deploy_on_vm
-  #     displayName: deploy on vm
-  #     environment:
-  #       name: devops
-        # resourceName: 
-        # resourceId: string # Id of resource.
-        # resourceType: virtualMachine
-        
-      # strategy: 
-      #   runOnce:
-      #     deploy:
-      #       steps:
-      #       - task: DownloadPipelineArtifact@2
-      #         inputs:
-      #           buildType: 'specific'
-      #           project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
-      #           definition: '15'
-      #           buildVersionToDownload: 'latest'
-      #           targetPath: '$(Pipeline.Workspace)'
-      #       - task: CmdLine@2
-      #         inputs:
-      #           script: |
-      #             sudo rm -rf /var/www/html/*
-      #             sudo cp -r  $(Pipeline.Workspace)/todo-ui/* /var/www/html/
-  - stage: validate
-    displayName: validate stage
+  - stage: CodeScan
+    displayName: terraform code Scan
     jobs:
-    - job: fmtvalidatesecurityscan
-      pool: myagentpool
-      displayName: fmt validate security scan 
-      steps:
-      - task: TerraformInstaller@1
-        inputs:
-          terraformVersion: 'latest'
-      - task: TerraformTask@5
-        displayName: terraform init
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-          backendServiceArm: 'service connection'
-          backendAzureRmStorageAccountName: 'punitst00456'
-          backendAzureRmContainerName: 'pipelinecontainer'
-          backendAzureRmKey: 'prodterraform.tfstate'    
-      - task: TerraformTask@5
-        inputs:
-          provider: 'azurerm'
-          command: 'validate'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-          # commandOptions: 'terraform fmt -check'
-
-  - stage: initplaninfracost
-    displayName: init Plan 
-    jobs:
-      - job: initPlan
-        pool: myagentpool
-        displayName: init Plan infracost
+      - job: terraform_code_sacan
+        pool: MyAgent
+        continueOnError: true
+        displayName: terraform code scan
         steps:
-        - task: TerraformTask@5
-          displayName: terraform init
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-            backendServiceArm: 'service connection'
-            backendAzureRmStorageAccountName: 'punitst00456'
-            backendAzureRmContainerName: 'pipelinecontainer'
-            backendAzureRmKey: 'prodterraform.tfstate'
         - task: PowerShell@2
           displayName: tflint
           continueOnError: true
@@ -166,77 +22,221 @@ stages:
               tflint --version
               tflint --init
                tflint
-        - task: tfsec@1
-          displayName: tf sec task
-          continueOnError: true
+  - stage: BuildAndPackage
+    displayName: Build & Artifact Packaging
+    jobs:
+    - job: ApplicationBuild
+      displayName: Application Build
+      pool: MyAgent
+      steps:            
+        - task: NodeTool@0
+          displayName: Setup Node.js Environment
           inputs:
+            versionSource: 'spec'
+            versionSpec: '16.x'
+        - task: PowerShell@2
+          displayName: Install Dependencies
+          inputs:
+            targetType: 'inline'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
+            script: 'npm install'    
+        - task: PowerShell@2
+          displayName: Build Application
+          inputs:
+            targetType: 'inline'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith'
+            script: 'npm run build'    
+        - task: PublishPipelineArtifact@1
+          displayName: Publish Build Artifact
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/ReactTodoUIMonolith/build'
+            artifact: 'todo-ui'
+            publishLocation: 'pipeline'
+  - stage: deployToDev
+    # condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+    displayName: Deploy To Dev VM
+    jobs:
+    - job: deploy
+      pool: MyAgent      
+      steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'todo-ui'
+          targetPath: '$(Pipeline.Workspace)/todo-ui'
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'sshcon'
+          sourceFolder: '$(Pipeline.Workspace)/todo-ui'
+          contents: '**'
+          targetFolder: '/home/adminuser/todo-ui'
+          readyTimeout: '20000'
+      - task: SSH@0
+        inputs:
+          sshEndpoint: 'sshcon'
+          runOptions: 'commands'
+          commands: |
+            sudo rm -rf /var/www/html/*
+            sudo cp -r /home/adminuser/todo-ui/* /var/www/html
+          readyTimeout: '20000'
+      - task: tfsec@1
+        displayName: tfsec
+        inputs:
             version: 'v1.26.0'
-            args: '--minimum-severity MEDIUM --tfvars-file $(Build.SourcesDirectory)/Resourcegroupproject/Environment/prod/terraform.tfvars'
             dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-        - task: PowerShell@2
-          displayName: checkov task
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            script: |
-              python -m pip install --upgrade pip
-              pip install --upgrade checkov
-              checkov -d . --framework terraform
-                
-        - task: TerraformTask@5
-          displayName: terraform plan
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-            environmentServiceNameAzureRM: 'service connection'
+  - stage: deploytodo
+    displayName: deploy todo on vm
+    jobs:
+    - deployment: deploy_on_vm
+      displayName: deploy on vm
+      environment:
+        name: devops
+        resourceName: 
+        resourceId: string # Id of resource.
+        resourceType: virtualMachine
         
-        - task: InfracostSetup@2
-          inputs:
-            apiKey: $(INFRACOST_API_KEY)
-            version: '0.10.x'
-            currency: 'INR'
-        - task: PowerShell@2
-          displayName: Run Infracost Breakdown
-          inputs:
-            targetType: 'inline'
-            script: |
-              infracost breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod' --format table
+      strategy: 
+        runOnce:
+          deploy:
+            steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'specific'
+                project: 'c1b81bd5-857d-4ba7-994f-2e367ce08b8a'
+                definition: '15'
+                buildVersionToDownload: 'latest'
+                targetPath: '$(Pipeline.Workspace)'
+            - task: CmdLine@2
+              inputs:
+                script: |
+                  sudo rm -rf /var/www/html/*
+                  sudo cp -r  $(Pipeline.Workspace)/todo-ui/* /var/www/html/
+  # - stage: validate
+  #   displayName: validate stage
+  #   jobs:
+  #   - job: fmtvalidatesecurityscan
+  #     pool: myagentpool
+  #     displayName: fmt validate security scan 
+  #     steps:
+  #     - task: TerraformInstaller@1
+  #       inputs:
+  #         terraformVersion: 'latest'
+  #     - task: TerraformTask@5
+  #       displayName: terraform init
+  #       inputs:
+  #         provider: 'azurerm'
+  #         command: 'init'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #         backendServiceArm: 'service connection'
+  #         backendAzureRmStorageAccountName: 'punitst00456'
+  #         backendAzureRmContainerName: 'pipelinecontainer'
+  #         backendAzureRmKey: 'prodterraform.tfstate'    
+  #     - task: TerraformTask@5
+  #       inputs:
+  #         provider: 'azurerm'
+  #         command: 'validate'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #         # commandOptions: 'terraform fmt -check'
+
+  # - stage: initplaninfracost
+  #   displayName: init Plan 
+  #   jobs:
+  #     - job: initPlan
+  #       pool: myagentpool
+  #       displayName: init Plan infracost
+  #       steps:
+  #       - task: TerraformTask@5
+  #         displayName: terraform init
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'init'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #           backendServiceArm: 'service connection'
+  #           backendAzureRmStorageAccountName: 'punitst00456'
+  #           backendAzureRmContainerName: 'pipelinecontainer'
+  #           backendAzureRmKey: 'prodterraform.tfstate'
+  #       - task: PowerShell@2
+  #         displayName: tflint
+  #         continueOnError: true
+  #         inputs:
+  #           targetType: 'inline'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #           script: |
+  #             'winget install terraformlinters.tflint --accept-source-agreements --accept-package-agreements;'
+  #             tflint --version
+  #             tflint --init
+  #              tflint
+  #       - task: tfsec@1
+  #         displayName: tf sec task
+  #         continueOnError: true
+  #         inputs:
+  #           version: 'v1.26.0'
+  #           args: '--minimum-severity MEDIUM --tfvars-file $(Build.SourcesDirectory)/Resourcegroupproject/Environment/prod/terraform.tfvars'
+  #           dir: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #       - task: PowerShell@2
+  #         displayName: checkov task
+  #         continueOnError: true
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: |
+  #             python -m pip install --upgrade pip
+  #             pip install --upgrade checkov
+  #             checkov -d . --framework terraform
+                
+  #       - task: TerraformTask@5
+  #         displayName: terraform plan
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'plan'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #           environmentServiceNameAzureRM: 'service connection'
+        
+  #       - task: InfracostSetup@2
+  #         inputs:
+  #           apiKey: $(INFRACOST_API_KEY)
+  #           version: '0.10.x'
+  #           currency: 'INR'
+  #       - task: PowerShell@2
+  #         displayName: Run Infracost Breakdown
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: |
+  #             infracost breakdown --path '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod' --format table
         
 
-  - stage: mannualvalidation
-    displayName: mannual validation
-    jobs:
-    - job: mannualvalidation
-      displayName: mannual validation
-      pool: server
-      steps:
-      - task: ManualValidation@1
-        inputs:
-          notifyUsers: 'punitojha0808@gmail.com'
-          approvers: 'punitojha0808@gmail.com'
-  - stage: terraformApply
-    dependsOn: mannualvalidation
-    displayName: terraform apply
-    jobs:
-    - job: terraformapplyjob
-      displayName: terraform apply
-      pool: myagentpool
-      steps:
-      - task: TerraformTask@5
-        displayName: terraform init
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-          backendServiceArm: 'service connection'
-          backendAzureRmStorageAccountName: 'punitst00456'
-          backendAzureRmContainerName: 'pipelinecontainer'
-          backendAzureRmKey: 'prodterraform.tfstate'
-      - task: TerraformTask@5
-        displayName: terraform apply
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
-          environmentServiceNameAzureRM: 'service connection'
+  # - stage: mannualvalidation
+  #   displayName: mannual validation
+  #   jobs:
+  #   - job: mannualvalidation
+  #     displayName: mannual validation
+  #     pool: server
+  #     steps:
+  #     - task: ManualValidation@1
+  #       inputs:
+  #         notifyUsers: 'punitojha0808@gmail.com'
+  #         approvers: 'punitojha0808@gmail.com'
+  # - stage: terraformApply
+  #   dependsOn: mannualvalidation
+  #   displayName: terraform apply
+  #   jobs:
+  #   - job: terraformapplyjob
+  #     displayName: terraform apply
+  #     pool: myagentpool
+  #     steps:
+  #     - task: TerraformTask@5
+  #       displayName: terraform init
+  #       inputs:
+  #         provider: 'azurerm'
+  #         command: 'init'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #         backendServiceArm: 'service connection'
+  #         backendAzureRmStorageAccountName: 'punitst00456'
+  #         backendAzureRmContainerName: 'pipelinecontainer'
+  #         backendAzureRmKey: 'prodterraform.tfstate'
+  #     - task: TerraformTask@5
+  #       displayName: terraform apply
+  #       inputs:
+  #         provider: 'azurerm'
+  #         command: 'apply'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)/Resourcegroupproject/Environment/prod'
+  #         environmentServiceNameAzureRM: 'service connection'
