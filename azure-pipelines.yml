@@ -64,7 +64,9 @@ stages:
           buildType: 'specific'
           project: '1602a10b-7376-422a-9c81-6ff474dc7789'
           definition: '27'
-          buildVersionToDownload: 'latest'
+          specificBuildWithTriggering: true
+          buildVersionToDownload: 'specific'
+          pipelineId: '292'
           artifactName: 'todo-ui'
           targetPath: '$(Pipeline.Workspace)/todo-ui'
       - task: CopyFilesOverSSH@0
